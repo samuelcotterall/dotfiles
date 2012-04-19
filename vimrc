@@ -42,10 +42,16 @@ set expandtab
 set autoindent
 set smartindent
 
+" Yank text to the OS X clipboard
+noremap <leader>y "*y
+noremap <leader>yy "*Y
+"
+" Preserve indentation while pasting text from the OS X clipboard
+noremap <leader>p :set paste<CR>:put  *<CR>:set nopaste<CR>
+
 " Keymappings
 let mapleader = ","
 map <leader>n :NERDTreeToggle<cr> 
-
 
 " http://stevelosh.com/blog/2010/09/coming-home-to-vim/
 nnoremap / /\v
