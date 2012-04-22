@@ -1,6 +1,7 @@
 filetype off
 set nocompatible 
 set encoding=utf8
+set laststatus=2
 
 " Shhhhh!
 set noerrorbells
@@ -41,6 +42,8 @@ set expandtab
 " Indent
 set autoindent
 set smartindent
+
+set backspace=indent,eol,start
 
 " Yank text to the OS X clipboard
 noremap <leader>y "*y
