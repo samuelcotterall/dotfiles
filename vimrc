@@ -16,9 +16,9 @@ call pathogen#infect()
 set clipboard=unnamed
 
 " Colour Scheme
+set t_Co=256
 set background=dark
-colorscheme solarized
-let g:solarized_termcolors=256
+colorscheme tomorrow-night 
 
 " Backups
 set nobackup
