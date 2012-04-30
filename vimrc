@@ -75,5 +75,7 @@ let NERDTreeShowBookmarks=1
 let NERDTreeHightlightCursorline=1
 let NERDTreeWinSize=1
 
-" Auto reload .vimrc on save
-" autocmd! bufwritepost .vimrc source %
+" Source the vimrc file after saving it
+if has("autocmd")
+  autocmd bufwritepost .vimrc source $MYVIMRC
+endif
