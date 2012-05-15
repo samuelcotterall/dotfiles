@@ -1,9 +1,6 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =7
-let g:netrw_dirhist_1='/Users/samuelcotterall/Sites/Google/WebRTC/Whoogle/trunk'
-let g:netrw_dirhist_2='/Users/samuelcotterall/Sites/Google/WebRTC/Whoogle'
-let g:netrw_dirhist_3='/Users/samuelcotterall/Sites/Google/WebRTC/Whoogle/trunk'
-let g:netrw_dirhist_4='/Users/samuelcotterall/.tmuxinator'
-let g:netrw_dirhist_5='/Users/samuelcotterall/Sites/Google/WebRTC/Whoogle/trunk'
-let g:netrw_dirhist_6='/Users/samuelcotterall/Downloads/whoogle-ext-X6'
-let g:netrw_dirhist_7='/Users/samuelcotterall/Sites/home'
+let g:netrw_dirhist_cnt =4
+let g:netrw_dirhist_1='/Users/samuelcotterall/Sites/GitHub/the-latch'
+let g:netrw_dirhist_2='/Users/samuelcotterall/Sites/GitHub/the-latch/wordpress/wp-content/themes/bones-responsive'
+let g:netrw_dirhist_3='/Volumes/vmtravel-dev'
+let g:netrw_dirhist_4='/Users/samuelcotterall/Dropbox/Current/vm_site'

@@ -10,6 +10,9 @@ set visualbell
 " Syntax
 syntax on
 filetype plugin indent on
+nnoremap ,m :w <BAR> !lessc % > %:t:r.css<CR><space>
+au BufRead,BufNewFile *.scss set filetype=scss
+" au BufNewFile,BufRead *.less set filetype=less
 
 " Pathogen
 call pathogen#infect()
@@ -33,16 +36,13 @@ set nowrap
 set list
 set listchars=tab:▸\ ,eol:¬
 
-" Tab stops
+" Tab stops and indentation
 set tabstop=2
 set softtabstop=2
 set shiftwidth=2
 set expandtab
-
-" Indent
 set autoindent
 set smartindent
-
 set backspace=indent,eol,start
 
 " Yank text to the OS X clipboard
@@ -54,7 +54,8 @@ noremap <leader>p :set paste<CR>:put  *<CR>:set nopaste<CR>
 
 " Keymappings
 let mapleader = ","
-map <leader>n :NERDTreeToggle<cr> 
+map <leader>n :NERDTreeToggle<CR> 
+map <leader>v :tabedit $MYVIMRC<CR>
 
 " http://stevelosh.com/blog/2010/09/coming-home-to-vim/
 nnoremap / /\v

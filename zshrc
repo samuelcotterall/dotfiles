@@ -1,4 +1,4 @@
-# Path to your oh-my-zsh configuration.
+#Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load.
@@ -29,7 +29,7 @@ ZSH_THEME="robbyrussell"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git github svn brew cake cloudapp vagrant vi-mode)
+plugins=(rvm git github svn brew cake cloudapp vagrant vi-mode)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -40,11 +40,16 @@ export PATH=/Users/samuelcotterall/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/
 
 # Use vim bundled with MacVim instead of the one that is bundled with OS X
 alias vim="mvim -v"
-
 alias vimrc="vim ~/.vimrc"
+
+alias shttps="python -m SimpleHTTPServer"
 
 # Task Warrior
 alias t="task"
 alias tl="task list"
 alias ta="task add"
 alias td="task done"
+
+# rvm 
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"  # This loads RVM into a shell session
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
