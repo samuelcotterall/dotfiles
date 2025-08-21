@@ -23,6 +23,8 @@
       fzf
       zoxide
       direnv
+      gitleaks
+      pre-commit
       nodejs_22
       mkcert
       cmake
@@ -39,15 +41,21 @@
   # atomically when a real `docker completion zsh` is available.
   home.file = {
     ".local/share/zsh/site-functions/_docker".text = ''
-# Home Manager managed stub for docker completion
-# If the real Docker CLI is available the runtime updater will replace this
-# file with the full completion script; this stub gives a minimal useful
-# fallback to avoid missing completion errors.
-_docker() {
-  compadd build run compose ps images pull push exec logs start stop rm rmi
-}
-compdef _docker docker
-'';
+    # Home Manager managed stub for docker completion
+    # If the real Docker CLI is available the runtime updater will replace this
+    # file with the full completion script; this stub gives a minimal useful
+    # fallback to avoid missing completion errors.
+    _docker() {
+      compadd build run compose ps images pull push exec logs start stop rm rmi
+    }
+    compdef _docker docker
+    '';
+      ".zshenv".text = ''
+    # Prepend the user site-functions directory to fpath early so compinit can
+    # autoload completions managed by Home Manager (e.g. _docker). This runs for
+    # all zsh shells before other init files.
+    fpath=("$HOME/.local/share/zsh/site-functions" $fpath)
+    '';
   };
 
 
@@ -117,12 +125,20 @@ compdef _docker docker
         # only when different. This avoids slowing every shell startup and
         # keeps the activation-time managed stub as the authoritative source.
         if command -v docker >/dev/null 2>&1; then
-          TMPFILE="$ZSH_SITE_FUNCS/_docker.tmp"
-          if docker completion zsh > "$TMPFILE" 2>/dev/null; then
-            if [ ! -f "$ZSH_SITE_FUNCS/_docker" ] || ! cmp -s "$TMPFILE" "$ZSH_SITE_FUNCS/_docker"; then
-              mv "$TMPFILE" "$ZSH_SITE_FUNCS/_docker"
-            else
-              rm -f "$TMPFILE"
+          # If the completion file is a symlink (managed by home-manager/Nix),
+          # don't try to overwrite it from shell startup — that can trigger an
+          # interactive "override" prompt. Only update when the target is a
+          # regular file owned/writable by the user.
+          if [ -L "$ZSH_SITE_FUNCS/_docker" ]; then
+            : # skip updater for home-managed symlink
+          else
+            TMPFILE="$ZSH_SITE_FUNCS/_docker.tmp"
+            if docker completion zsh > "$TMPFILE" 2>/dev/null; then
+              if [ ! -f "$ZSH_SITE_FUNCS/_docker" ] || ! cmp -s "$TMPFILE" "$ZSH_SITE_FUNCS/_docker"; then
+                mv -f "$TMPFILE" "$ZSH_SITE_FUNCS/_docker"
+              else
+                rm -f "$TMPFILE"
+              fi
             fi
           fi
         fi

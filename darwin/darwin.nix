@@ -46,7 +46,7 @@
 
   homebrew = {
     enable = true;
-    brews = [ "supabase/tap/supabase" "postgresql" "pnpm" ];
+  brews = [ "supabase/tap/supabase" "postgresql" "pnpm" "semgrep" ];
     casks = [];
     # Add homebrew to PATH
     onActivation.cleanup = "zap";
