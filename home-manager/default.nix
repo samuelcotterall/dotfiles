@@ -31,7 +31,8 @@
       gh
       yarn
       _1password-cli
-      pkgs.python3
+  pipx
+  pkgs.python3
     ];
   };
 
@@ -113,6 +114,28 @@
         export PATH="$PYENV_ROOT/bin:$PATH"
         if command -v pyenv 1>/dev/null 2>&1; then
           eval "$(pyenv init -)"
+        fi
+
+        # Ensure pipx is available and use it to install `uv` (astral-sh/uv).
+        # This keeps the uv CLI isolated from global pip and makes it available
+        # for the active Python (pyenv shims / Homebrew python).
+        PIPX_BIN="${pkgs.pipx}/bin/pipx"
+        # prefer the packaged pipx, fall back to any pipx on PATH
+        if [ ! -x "$PIPX_BIN" ]; then
+          PIPX_BIN="$(command -v pipx 2>/dev/null || true)"
+        fi
+        if [ -n "$PIPX_BIN" ]; then
+          # ensure user-local bin is in PATH so pipx-installed apps are found
+          export PATH="$HOME/.local/bin:$PATH"
+          # make sure pipx has its path set up
+          "$PIPX_BIN" ensurepath >/dev/null 2>&1 || true
+          # install or upgrade uv idempotently
+          if ! command -v uv >/dev/null 2>&1; then
+            "$PIPX_BIN" install uv >/dev/null 2>&1 || "$PIPX_BIN" upgrade uv >/dev/null 2>&1 || true
+          else
+            # if uv exists but is older, attempt an upgrade quietly
+            "$PIPX_BIN" upgrade uv >/dev/null 2>&1 || true
+          fi
         fi
 
         # Docker CLI zsh completion: ensure site-functions dir is in fpath
