@@ -117,12 +117,41 @@
           eval "$( ${pkgs.direnv}/bin/direnv hook zsh )"
         fi
 
-        # Initialize pyenv
+        # Lazy initialize pyenv only when entering Python projects to speed up shell startup.
         export PYENV_ROOT="$HOME/.pyenv"
-        export PATH="$PYENV_ROOT/bin:$PATH"
-        if command -v pyenv 1>/dev/null 2>&1; then
-          eval "$(pyenv init -)"
+
+        # _pyenv_activate_once: perform one-time initialization of pyenv in this shell
+        _pyenv_activate_once() {
+          # avoid reinitializing
+          [ -n "${PYENV_ACTIVE-}" ] && return
+          # add pyenv bin to PATH and init
+          export PATH="$PYENV_ROOT/bin:$PATH"
+          if command -v pyenv 1>/dev/null 2>&1; then
+            eval "$(pyenv init -)"
+            pyenv rehash 2>/dev/null || true
+            export PYENV_ACTIVE=1
+          fi
+        }
+
+        # _maybe_init_pyenv: check for Python project files and initialize lazily
+        _maybe_init_pyenv() {
+          # If already active, nothing to do
+          [ -n "${PYENV_ACTIVE-}" ] && return
+          # Check for common Python project markers in the current directory
+          if [ -f .python-version ] || [ -f pyproject.toml ] || [ -f Pipfile ] || [ -d .venv ]; then
+            _pyenv_activate_once
+          fi
+        }
+
+        # Ensure add-zsh-hook is available and attach _maybe_init_pyenv to chpwd so
+        # it runs whenever you change directories.
+        autoload -Uz add-zsh-hook 2>/dev/null || true
+        if type add-zsh-hook >/dev/null 2>&1; then
+          add-zsh-hook chpwd _maybe_init_pyenv
         fi
+
+        # Run once for the current working directory at shell startup (non-blocking)
+        _maybe_init_pyenv
 
         # --- migrated from /etc/zshrc.local ---
         # Enable UTF-8 combining characters support when appropriate
