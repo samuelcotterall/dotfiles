@@ -124,6 +124,32 @@
           eval "$(pyenv init -)"
         fi
 
+        # --- migrated from /etc/zshrc.local ---
+        # Enable UTF-8 combining characters support when appropriate
+        if [[ ! -x /usr/bin/locale ]] || [[ "$(locale LC_CTYPE)" == "UTF-8" ]]; then
+          setopt COMBINING_CHARS
+        fi
+
+        # Disable the log builtin to avoid conflict with /usr/bin/log
+        disable log || true
+
+        # History behaviour
+        export HISTFILE="${config.home.homeDirectory}/.zsh_history"
+        SAVEHIST=1000
+        HISTSIZE=2000
+        setopt HIST_IGNORE_DUPS SHARE_HISTORY HIST_FCNTL_LOCK
+
+        # Beep on error
+        setopt BEEP || true
+
+        # Default key bindings and prompt
+        bindkey -e || true
+        PS1="%n@%m %1~ %# "
+
+        # Terminal-specific system support (if present)
+        [ -r "/etc/zshrc_$TERM_PROGRAM" ] && . "/etc/zshrc_$TERM_PROGRAM"
+        # --- end migration ---
+
         # Ensure pipx is available and use it to install `uv` (astral-sh/uv).
         # This keeps the uv CLI isolated from global pip and makes it available
         # for the active Python (pyenv shims / Homebrew python).
