@@ -229,12 +229,18 @@
           fi
         fi
 
-        # Ensure completion system is initialized so new completions are picked up
-        autoload -Uz compinit
-        compinit -u
+        # Optionally skip expensive completion init and highlighting for fast startup tests
+        if [ -z "${ZSH_FAST_STARTUP-}" ]; then
+          # Ensure completion system is initialized so new completions are picked up
+          autoload -Uz compinit
+          compinit -u
 
-        # zsh-syntax-highlighting should be sourced last
-        source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+          # zsh-syntax-highlighting should be sourced last
+          source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+        else
+          # Fast startup: skip compinit and syntax highlighting
+          :
+        fi
         clear
       '';
     };
