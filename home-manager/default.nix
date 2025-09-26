@@ -41,7 +41,7 @@
   # The runtime updater in `programs.zsh.initExtra` will replace this stub
   # atomically when a real `docker completion zsh` is available.
   home.file = {
-    ".local/share/zsh/site-functions/_docker".text = ''
+  ".local/share/zsh/site-functions/_docker".text = ''
     # Home Manager managed stub for docker completion
     # If the real Docker CLI is available the runtime updater will replace this
     # file with the full completion script; this stub gives a minimal useful
@@ -55,7 +55,15 @@
     # Prepend the user site-functions directory to fpath early so compinit can
     # autoload completions managed by Home Manager (e.g. _docker). This runs for
     # all zsh shells before other init files.
-    fpath=("$HOME/.local/share/zsh/site-functions" $fpath)
+      fpath=("$HOME/.local/share/zsh/site-functions" $fpath)
+      # Ensure user-local bin is in PATH early so user-installed npm global
+      # packages (prefix ~/.local) are found before system/nix paths.
+      export PATH="$HOME/.local/bin:$PATH"
+    '';
+    ".npmrc".text = ''
+      # Use a user-local npm prefix so `npm install -g` writes to ~/.local and
+      # doesn't try to modify the read-only Nix store.
+      prefix = ~/.local
     '';
   };
 
