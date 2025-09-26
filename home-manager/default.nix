@@ -123,7 +123,7 @@
         # _pyenv_activate_once: perform one-time initialization of pyenv in this shell
         _pyenv_activate_once() {
           # avoid reinitializing
-          [ -n "${PYENV_ACTIVE-}" ] && return
+          [ -n "\${PYENV_ACTIVE-}" ] && return
           # add pyenv bin to PATH and init
           export PATH="$PYENV_ROOT/bin:$PATH"
           if command -v pyenv 1>/dev/null 2>&1; then
@@ -136,7 +136,7 @@
         # _maybe_init_pyenv: check for Python project files and initialize lazily
         _maybe_init_pyenv() {
           # If already active, nothing to do
-          [ -n "${PYENV_ACTIVE-}" ] && return
+          [ -n "\${PYENV_ACTIVE-}" ] && return
           # Check for common Python project markers in the current directory
           if [ -f .python-version ] || [ -f pyproject.toml ] || [ -f Pipfile ] || [ -d .venv ]; then
             _pyenv_activate_once
